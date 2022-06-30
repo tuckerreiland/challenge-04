@@ -1,0 +1,32 @@
+body{
+    display: flex;
+    justify-content: center
+}
+
+#quiz{
+    background-color: aqua;
+    margin: 100px;
+}
+
+
+#start{
+    background-color: red;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+#start h1{
+    flex: 0 0 100%;
+}
+
+#game{
+    background-color: chartreuse;
+    display: none;
+}
+
+#hiscores-board{
+    background-color: orange;
+    margin: 100px;
+    display: none;
+}
