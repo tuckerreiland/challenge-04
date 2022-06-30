@@ -17,7 +17,7 @@ body{
 }
 
 #start h1{
-    flex: 0 0 100%;
+    margin: 50px;
 }
 
 #game{

@@ -6,33 +6,34 @@ var startDisplay = document.querySelector("#start")
 var gameDisplay = document.querySelector("#game")
 var answersDisplay = document.querySelector("#answers")
 var questionDisplay = document.querySelector("#question")
+var answerListItem = document.querySelector(".answer-key")
 
 //arrays
 var questions = [
     {
-        question: "2+2?",
-        answers: [3,4,5,6],
-        correctAnswer: "4",
+        question: "How many eggs go into your hollandaise?  Answer: it doesn't matter.  Why?",
+        answers: ["Lecithin","Mucilage","Sodium Caseinate","Diglycerides"],
+        correctAnswer: "Lecithin",
     },
     {
-        question: "2+3?",
-        answers: [3,4,5,6],
-        correctAnswer: "5",
+        question: "Speaking of hollandaise, what is it?",
+        answers: ["Mother Sauce","Delicious","Daughter Sauce","A rap lyric about long distance trucking."],
+        correctAnswer: "Mother Sauce",
     },
     {
-        question: "2+1?",
-        answers: [3,4,5,6],
-        correctAnswer: "3",
+        question: "This questions a freebie chef.",
+        answers: ["Butter","Butter","Olive Oil","Butter"],
+        correctAnswer: "Butter",
     },
     {
-        question: "4-1?",
-        answers: [3,4,5,6],
-        correctAnswer: "3",
+        question: "Break a sauce in a French kitchen and verbal abuse will be the least of your concerns.  What's the scary temperature for butter mounted emulsions?",
+        answers: ["160F","170F","180","190"],
+        correctAnswer: "180",
     },
     {
-        question: "(4*2)-2?",
-        answers: [3,4,5,6],
-        correctAnswer: "6",
+        question: "This lady doesn't eat quadrapeds.  Do you have that out of place?",
+        answers: ["Oui Chef!","Oui Chef!","Oui Chef!","Oui Chef!"],
+        correctAnswer: "Oui Chef!",
     },
 ]
 var highScores = [
@@ -42,7 +43,8 @@ var highScores = [
     }
 ]
 
-var currentQuestion = "";
+var currentQuestion = ""
+var currentQuestionId = 0
 var timeLeft = 90;
 var score = 0;
 
@@ -56,9 +58,21 @@ startGameBtn.addEventListener("click", function(){
     if (displayHiScores.style.display = "flex"){
         displayHiScores.style.display = "none"
     }
-
-    
 })
+
+questionDisplay.textContent = questions[currentQuestionId].question
+questions[currentQuestionId].answers.forEach(answer =>{
+    var listItem = document.createElement('li')
+    listItem.className = 'answer-key'
+    console.log(listItem)
+    listItem.innerText = answer
+    answersDisplay.appendChild(listItem);
+})
+
+answerListItem.addEventListener("click", function(){
+
+})
+
 
 hiscoreDisplayBtn.addEventListener("click", function(){
     displayHiScores.style.display = "flex"
