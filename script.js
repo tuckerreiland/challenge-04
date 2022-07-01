@@ -41,6 +41,7 @@ var questions = [
     },
 ]
 
+
 var currentQuestion = ""
 var currentQuestionId = 0
 var timeLeft = 90;
@@ -92,7 +93,9 @@ function loadHighScoreSection(){
     highScoresList.innerHTML = '';
 
     var highScores = JSON.parse(window.localStorage.getItem("highScores"))
-    
+    highScores.sort(function (a, b) {
+        return b.score - a.score;
+    })
     // Iterate and create li's for answers
     highScores.forEach(highScore =>{
         var listItem = document.createElement('li')
@@ -100,8 +103,8 @@ function loadHighScoreSection(){
         listItem.innerText = highScore.initials + ": " + highScore.score;
         highScoresList.appendChild(listItem);
         listItem.addEventListener("click", answerClickHandler);
-    }
-    )}
+        
+})}
 
 function loadQuestion(questionId){
     // First clear the old stuff
