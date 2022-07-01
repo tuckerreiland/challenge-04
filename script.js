@@ -12,6 +12,7 @@ var initialsInput = document.querySelector("#initials-entry")
 var initialsLabel = document.querySelector("#initials-label")
 var scoreSubmitBtn = document.querySelector("#submit-btn")
 var highScoresList = document.querySelector("#highscores-list")
+var timerElement = document.querySelector("#timer");
 
 var questions = [
     {
@@ -44,8 +45,8 @@ var questions = [
 
 var currentQuestion = ""
 var currentQuestionId = 0
-var timeLeft = 90;
-var score = 0;
+var timer;
+var timerCount;
 var userAnswers = [];
 
 startDisplay.style.display = "flex"
@@ -64,6 +65,8 @@ function loadGameSection(){
     gameDisplay.style.display = "flex"
     displayHiScores.style.display = "none"
     userScoreSubmitDisplay.style.display = "none"
+    timerCount=100;
+    startTimer()
 //start&score button disappear  
 }
 
@@ -149,6 +152,7 @@ function answerClickHandler(){
         loadQuestion(currentQuestionId);
     } else {
         loadUserScoreInputSection(userAnswers);
+        clearInterval(timer);
     } 
 }
 
@@ -165,6 +169,21 @@ function getUserScore(userAnswers){
     });
     return userScore;
 }
+
+function startTimer() {
+    // Sets timer
+    timer = setInterval(function() {
+      timerCount--;
+      timerElement.textContent = timerCount;
+      // Tests if time has run out
+      if (timerCount === 0) {
+        // Clears interval
+        clearInterval(timer);
+        loadUserScoreInputSection();
+      }
+    }, 1000);
+  }
+
  //display play game button 
     //displays question
         //creates li.answer-key*4 

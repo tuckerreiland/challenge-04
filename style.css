@@ -4,7 +4,8 @@
 body{
     margin: 0;
     height: 100%;
-    background-image: url(./images/1491585151589.jpeg);
+    background-color: blanchedalmond;
+    background-image: url("images/1491585151589.jpeg");
     display: flex;
     justify-content: center;
  
