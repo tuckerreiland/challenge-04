@@ -6,9 +6,13 @@ var startDisplay = document.querySelector("#start")
 var gameDisplay = document.querySelector("#game")
 var answersDisplay = document.querySelector("#answers")
 var questionDisplay = document.querySelector("#question")
+var userScoreSubmitDisplay = document.querySelector("#user-score-submit")
 var answerListItem = document.querySelector(".answer-key")
+var initialsInput = document.querySelector("#initials-entry")
+var initialsLabel = document.querySelector("#initials-label")
+var scoreSubmitBtn = document.querySelector("#submit-btn")
+var highScoresList = document.querySelector("#highscores-list")
 
-//arrays
 var questions = [
     {
         question: "How many eggs go into your hollandaise?  Answer: it doesn't matter.  Why?",
@@ -27,8 +31,8 @@ var questions = [
     },
     {
         question: "Break a sauce in a French kitchen and verbal abuse will be the least of your concerns.  What's the scary temperature for butter mounted emulsions?",
-        answers: ["160F","170F","180","190"],
-        correctAnswer: "180",
+        answers: ["160F","170F","180F","190F"],
+        correctAnswer: "180F",
     },
     {
         question: "This lady doesn't eat quadrapeds.  Do you have that out of place?",
@@ -36,82 +40,140 @@ var questions = [
         correctAnswer: "Oui Chef!",
     },
 ]
-var highScores = [
-    {
-        initials:"",
-        score:0,
-    }
-]
 
 var currentQuestion = ""
 var currentQuestionId = 0
 var timeLeft = 90;
 var score = 0;
+var userAnswers = [];
 
-//start game
-    //triggered event listenere on start game button
-    //start timer
-    //setup 1st question
-startGameBtn.addEventListener("click", function(){
+startDisplay.style.display = "flex"
+gameDisplay.style.display = "none"
+displayHiScores.style.display = "none"
+userScoreSubmitDisplay.style.display = "none"
+
+startGameBtn.addEventListener("click", loadGameSection);
+hiscoreDisplayBtn.addEventListener("click", loadHighScoreSection);
+
+loadQuestion(currentQuestionId);
+//start button
+   
+function loadGameSection(){
     startDisplay.style.display = "none"
     gameDisplay.style.display = "flex"
-    if (displayHiScores.style.display = "flex"){
-        displayHiScores.style.display = "none"
-    }
-})
+    displayHiScores.style.display = "none"
+    userScoreSubmitDisplay.style.display = "none"
+//start&score button disappear  
+}
 
-questionDisplay.textContent = questions[currentQuestionId].question
-questions[currentQuestionId].answers.forEach(answer =>{
-    var listItem = document.createElement('li')
-    listItem.className = 'answer-key'
-    console.log(listItem)
-    listItem.innerText = answer
-    answersDisplay.appendChild(listItem);
-})
+function loadUserScoreInputSection(userAnswers){
+    startDisplay.style.display = "none";
+    gameDisplay.style.display = "none";
+    userScoreSubmitDisplay.style.display = "flex";
+    displayHiScores.style.display = "none"
 
-answerListItem.addEventListener("click", function(){
+    var userScore = getUserScore(userAnswers);
+    initialsLabel.innerText = "Your score was " + userScore + ". Enter your initials for the high score board"
 
-})
+    scoreSubmitBtn.addEventListener("click", function(){
+        userScoreSubmitClickHandler(userAnswers);
+    })
+}
 
-
-hiscoreDisplayBtn.addEventListener("click", function(){
+//hi score button
+function loadHighScoreSection(){
+//display hi scores 
+    startDisplay.style.display = "none";
+    gameDisplay.style.display = "none";
+    userScoreSubmitDisplay.style.display = "none";
     displayHiScores.style.display = "flex"
+       
+    // clear old high scores if there are any
+    highScoresList.innerHTML = '';
 
-})
+    var highScores = JSON.parse(window.localStorage.getItem("highScores"))
+    
+    // Iterate and create li's for answers
+    highScores.forEach(highScore =>{
+        var listItem = document.createElement('li')
+        listItem.className = 'high-score'
+        listItem.innerText = highScore.initials + ": " + highScore.score;
+        highScoresList.appendChild(listItem);
+        listItem.addEventListener("click", answerClickHandler);
+    }
+    )}
 
-//question carousel
+function loadQuestion(questionId){
+    // First clear the old stuff
+    answersDisplay.innerHTML = '';
 
-//make button variables so that we can update text rather than add/delete buttons
+    // Set the question
+    questionDisplay.textContent = questions[questionId].question
 
-//timer
-    //setInterval()
-    //render to page
+    // Iterate and create li's for answers
+    questions[questionId].answers.forEach(answer =>{
+        var listItem = document.createElement('li')
+        listItem.className = 'answer-key'
+        listItem.innerText = answer;
+        answersDisplay.appendChild(listItem);
+        listItem.addEventListener("click", answerClickHandler);
+    })
+}
 
-//loadQuestion
-    //render question and multiple choices to page
+function userScoreSubmitClickHandler(userAnswers){
+    var userInitials = initialsInput.value;
+    var userScore = getUserScore(userAnswers);
+    var userInitials = initialsInput.value;
+    initialsLabel.innerText = "Your score was " + userScore + ". Enter your initials for the high score board"
+    var highScores = []
+    if(window.localStorage.getItem("highScores")){
+        var highScores = JSON.parse(window.localStorage.getItem("highScores"))
+    }
+    highScores.push({initials: userInitials, score: userScore})
+    window.localStorage.setItem("highScores", JSON.stringify(highScores))
+    loadHighScoreSection();
+}
 
-//checkAnswer
-    //check user input
-    //compare choice with correect answer
-    //act on right/wrong 
-        //add to score or deduct time
-    //loadQuestion()
+function answerClickHandler(){
+    userAnswers[currentQuestionId]=this.innerText;
+    console.log(this)
+    // increment the question id
+    currentQuestionId++;
 
+    // If the there are still questions to go, load the next one.
+    // Else if we're done, load the user score submit
+    if(currentQuestionId < questions.length){
+        loadQuestion(currentQuestionId);
+    } else {
+        loadUserScoreInputSection(userAnswers);
+    } 
+}
 
-//endGame
-    //called at end of timer or last question done
-    //cancels timer
-    //user enters initials
-    //local storage
-        //read ls and store in js variable
-        //check if null
-        //update js variable with our new score
-        //render to page
-        //save updated js variable to ls
-    //make highscores visible
-    //prompt to play again
+function getUserScore(userAnswers){
+    userScore = 0;
+    // Iterates the userScores and checks the corresponding index in the questions array for a match
+    // Increments userScore if correct
+    userAnswers.forEach(function(answer, index){
+        console.log(questions[index].correctAnswer)
+        console.log(answer)
+        if(answer === questions[index].correctAnswer){
+            userScore++;
+        }
+    });
+    return userScore;
+}
+ //display play game button 
+    //displays question
+        //creates li.answer-key*4 
+        //event listener for .answer
+        //append DOM
+    //User chooses answer event listener
+        //compare to correctAnswer
+        //add to score
+        //move through array currentQuestion++
+    //End of question array
+        //enter initials
+        //submit button
+            //save to local storage
+            //disdplay hi score button
 
-//highscores (reference todo webAPI thing)
-    //create list itmes
-    //sort the highScores display by score property
-    //clear hiscores
