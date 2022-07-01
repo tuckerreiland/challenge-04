@@ -1,0 +1,61 @@
+*{
+    font-family: sans-serif;
+}
+body{
+    margin: 0;
+    height: 100%;
+    background-image: url(./images/1491585151589.jpeg);
+    display: flex;
+    justify-content: center;
+ 
+}
+
+section#start, section#user-score-submit, aside{
+    background-color: black;
+    flex: 0 0 50%;
+    align-items: center;
+    padding: 50px;
+    margin: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+section#game{
+    background-color: black;
+    flex: 0 0 50%;
+    align-items: left;
+    padding: 50px;
+    margin: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+h1 h2{
+    width: 100%;
+    text-align: center;
+    margin: 10px;
+    padding: 10px;
+}
+
+button{
+    margin: 10px;
+    padding: 10px;
+}
+
+ol{
+    display: flex;
+    flex-direction: column;
+}
+
+li {
+    width: 100%;
+    background-color: blanchedalmond;
+    color: black;
+    padding: 5px;
+    margin: 5px;
+    list-style: none;
+}
+
+#answers li:hover{
+    background-color: coral;
+}
